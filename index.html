@@ -39,21 +39,21 @@
         let totalScore = 0;
         const boardCenter = { x: 250, y: 250 }; // Mittelpunkt der Dartscheibe
         const radii = {
-            bullseye: 10,
-            outerBull: 25,
-            tripleRingStart: 100,
-            tripleRingEnd: 110,
-            doubleRingStart: 190,
-            doubleRingEnd: 200,
+            bullseye: 12,
+            outerBull: 30,
+            tripleRingStart: 110,
+            tripleRingEnd: 130,
+            doubleRingStart: 200,
+            doubleRingEnd: 220,
             boardRadius: 250
         };
         
-        const segments = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5];
+        const segments = [6, 13, 4, 18, 1, 20, 5, 12, 9, 14, 11, 8, 16, 7, 19, 3, 17, 2, 15, 10];
         
         function getAngle(x, y) {
             let angle = Math.atan2(y - boardCenter.y, x - boardCenter.x) * (180 / Math.PI);
-            angle = (angle + 360 + 9) % 360;
-            return Math.floor(angle / 18);
+            angle = (angle + 360) % 360;
+            return Math.floor((angle + 9) / 18) % 20;
         }
         
         function getScore(x, y) {
