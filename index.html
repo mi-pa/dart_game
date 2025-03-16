@@ -17,6 +17,20 @@
             position: relative;
             display: inline-block;
         }
+        .segment {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .segment span {
+            position: absolute;
+            transform-origin: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: red;
+        }
         #score {
             font-size: 24px;
             margin-top: 20px;
@@ -31,7 +45,9 @@
 </head>
 <body>
     <h1>Dart Punkte Zähler</h1>
-    <div id="dartboard" onclick="calculateScore(event)"></div>
+    <div id="dartboard" onclick="calculateScore(event)">
+        <div class="segment" id="segments"></div>
+    </div>
     <div id="score">Punkte: <span id="points">0</span></div>
     <button id="reset" onclick="resetScore()">Zurücksetzen</button>
 
@@ -86,6 +102,20 @@
             totalScore = 0;
             document.getElementById("points").innerText = totalScore;
         }
+
+        function drawSegments() {
+            const segmentContainer = document.getElementById("segments");
+            for (let i = 0; i < 20; i++) {
+                const angle = (i * 18) - 9;
+                const label = document.createElement("span");
+                label.innerText = segments[i];
+                label.style.transform = `rotate(${angle}deg) translate(100px)`;
+                label.style.left = "50%";
+                label.style.top = "50%";
+                segmentContainer.appendChild(label);
+            }
+        }
+        drawSegments();
     </script>
 </body>
 </html>
