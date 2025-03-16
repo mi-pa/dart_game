@@ -44,6 +44,7 @@
             let dy = center.y - y;
             let angle = Math.atan2(dy, dx) * (180 / Math.PI);
             if (angle < 0) angle += 360;
+            angle = (angle + 90) % 360; // Drehung um 90 Grad gegen den Uhrzeigersinn
             return angle;
         }
 
