@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dart Punkte Zähler</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        #dartboard {
+            width: 500px;
+            height: 500px;
+            background: url('board.png') no-repeat center;
+            background-size: cover;
+            position: relative;
+            display: inline-block;
+        }
+        #score {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        #reset {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dart Punkte Zähler</h1>
+    <div id="dartboard" onclick="calculateScore(event)"></div>
+    <div id="score">Punkte: <span id="points">0</span></div>
+    <button id="reset" onclick="resetScore()">Zurücksetzen</button>
+
+    <script>
+        let totalScore = 0;
+        const boardCenter = { x: 250, y: 250 }; // Mittelpunkt der Dartscheibe
+        const radii = {
+            bullseye: 10,
+            outerBull: 25,
+            tripleRingStart: 100,
+            tripleRingEnd: 110,
+            doubleRingStart: 190,
+            doubleRingEnd: 200,
+            boardRadius: 250
+        };
+        
+        const segments = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5];
+        
+        function getAngle(x, y) {
+            let angle = Math.atan2(y - boardCenter.y, x - boardCenter.x) * (180 / Math.PI);
+            angle = (angle + 360 + 9) % 360;
+            return Math.floor(angle / 18);
+        }
+        
+        function getScore(x, y) {
+            const dx = x - boardCenter.x;
+            const dy = y - boardCenter.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance <= radii.bullseye) return 50;
+            if (distance <= radii.outerBull) return 25;
+            
+            const segment = segments[getAngle(x, y)];
+            
+            if (distance >= radii.tripleRingStart && distance <= radii.tripleRingEnd) return segment * 3;
+            if (distance >= radii.doubleRingStart && distance <= radii.doubleRingEnd) return segment * 2;
+            if (distance <= radii.boardRadius) return segment;
+            
+            return 0;
+        }
+
+        function calculateScore(event) {
+            const rect = event.target.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            const score = getScore(x, y);
+            totalScore += score;
+            document.getElementById("points").innerText = totalScore;
+        }
+
+        function resetScore() {
+            totalScore = 0;
+            document.getElementById("points").innerText = totalScore;
+        }
+    </script>
+</body>
+</html>
